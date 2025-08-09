@@ -7,12 +7,12 @@ Pytorch Convolutional Double DQN model to play 2048
 From personal gameplay experience, I like to keep the high tile in the top left. It's a bad idea to
 take the "down" action (usually detrimental when one is forced to "down"). By discouraging the "down" action, my goal is that the model makes progress faster.
 
-<img src="media/distribution.png" width="150" />
-<img src="media/consistency.png" width="150" />
+<img src="media/distribution.png" width="450" />
+<img src="media/consistency.png" width="450" />
 
 ## Visualization
 
-<img src="media/play.gif" width="150" />
+<img src="media/play.gif" width="450" />
 
 ## Installation
 Clone this repo and create a conda environment to keep package installs clean
@@ -38,7 +38,7 @@ python3 plot.py
 ```
 
 ## Credits
-<img src="media/model.jpeg" width="150" />
+<img src="media/model.jpeg" width="450" />
 Model by [https://github.com/bowass/2048-DQN-Agent/tree/main]
 
 ## License
