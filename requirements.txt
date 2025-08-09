@@ -1,0 +1,7 @@
+numpy
+torch
+gymnasium
+gymnasium-2048
+matplotlib
+pandas
+torchsummary
