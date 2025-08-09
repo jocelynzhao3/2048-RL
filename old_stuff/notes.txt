@@ -1,0 +1,85 @@
+Conda environment:
+conda activate rl2048
+conda deactivate
+
+Patch the environment: open /opt/anaconda3/envs/rl2048/lib/python3.12/site-packages/gymnasium_2048/envs/twenty_forty_eight.py
+
+Training observations:
+- Punish actions that don't change the board state
+~ Stuck at 128 on average
+~ Stuck 256 logic-wise
+- rewards NOT ALIGNED with end goal of 2048 -> reward function tuning is interesting problem
+
+- Model 0 is a good start
+    - structure is neat but model didn't learn to "fix" mistakes
+    - we see a pyramid/triangle structure, prefer a "snake" structure HOWEVER we don't want flat board (ex. force down move)
+    - board fills quickly: should reward merges/# empty tiles (or # tiles < 256) or give this reward if board is almost full
+        - alternatively, reward 1x tile per value
+    - learning to fix mistakes can be tricky: modify epsilon when board is scattered to explore fix methods
+    - tip: keep a row/col filled even when merge is allowed (pinning the row)
+    - punish "boxed in" numbers: ex. 2 surronded by higher values
+    - base reward for changing the board??? -> base reward for merging is part of env
+
+- Model 1
+    - bad performance: did not learn stucture
+    - too many little rewards can hurt
+
+- Model 2
+    - Build off Model 0
+    - Notice that 2048 gives sparse rewards, which is a challenge for this game
+    - Help the gameplay out in the beginning???
+    - Tricky to notice merges "2 steps away"
+    - Logic is great until 512 then sad? Capped at 1024
+    - Reward shaping is tricky and requires game knowledge
+
+- Model 3
+    - Build on hierarchical idea of easy/medium/hard game stage
+    - Consists of meta level and low level controller
+    - Implement curriculum to the learning
+    - Requires lots of fine tuning?
+
+- Model 4
+    - Basic reward + ConvDQN
+
+- Model 5
+    - Human feedback RL
+    - Mimicking human performs poorly on unseen states?
+
+- Model 6
+    - Basic reward + Deeper ConvDQN
+    - Consider early stopping! Model performs worse after 3000 episodes
+    - Prevent moving down (bug here)
+    - Video to gif: ffmpeg -i play.mov -vf "fps=15,scale=800:-1:flags=lanczos" play.gif
+    - TODO: Write all implementations yourself
+
+As a human, we notice things about the 2048 game:
+- When tiles of the same value are adjacent, we can merge them
+- We'd like to stack tiles in decending powers of 2 (this matters more for higher powers)
+- Keep high tile in a corner
+
+Questions:
+target_net.load_state_dict(main_net.load_state_dict())  # TODO: why this?? why target net
+batch_states, batch_actions, batch_rewards, batch_next_states, batch_dones = zip(*samples) # TODO: what is zip
+q_values = main_net(batch_states).gather(1, batch_actions.unsqueeze(1)).squeeze(1) # TODO: what is gathering? squeeze?
+loss = ((q_values-target_q_values.detach())**2 * weights).mean() # TODO what is detach?
+
+Training suggestions:
+- Double DQN (Action/Value decoupled --> prevents Q-value overestimation)
+- Less Frequent Updates
+- Priority Replay Buffer (TODO: try to implement yourself)
+    - from prioritized_replay_buffer import PrioritizedReplayBuffer
+    - buffer = PrioritizedReplayBuffer(capacity=10000, alpha=0.6)
+- Add transitions
+    - td_error = abs(q_val - target_q)
+    - buffer.add(state, action, reward, next_state, done, priority=td_error)
+- Sample with importance sampling weights
+    - batch, weights, indices = buffer.sample(batch_size=64, beta=0.4)
+
+Next steps:
+- Explore Transformers (maybe in alternate project)
+- Graph NN
+- Build tester and train longer and bigger
+- Try NN modifications (dropout, regularization) -> AdamW optimizer for L2 is more complex
+- Stronger reward signal: reward max value, penalize early death smoothly, etc.
+    - Clever reward: just # empty tiles
+- Github README
