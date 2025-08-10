@@ -11,7 +11,7 @@ Random actions (baseline) vs trained model (agent):
 
 <img src="media/distribution.png" width="450" />
 
-Model is able to consistently reach 512 tile early in training: 
+Model is able to consistently reach higher tiles (like 512) early in training: 
 
 <img src="media/consistency.png" width="450" />
 
