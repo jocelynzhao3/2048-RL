@@ -7,6 +7,7 @@ Pytorch Convolutional Double DQN model to play 2048
 From personal gameplay experience, I like to keep the high tile in the top left. It's a bad idea to
 take the "down" action (usually detrimental when one is forced to "down"). By discouraging the "down" action, my goal is that the model makes progress faster.
 
+Random actions (baseline) vs trained model:
 <img src="media/distribution.png" width="450" />
 <img src="media/consistency.png" width="450" />
 
