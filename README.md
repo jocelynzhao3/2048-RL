@@ -10,6 +10,9 @@ take the "down" action (usually detrimental when one is forced to "down"). By di
 Random actions (baseline) vs trained model (agent):
 
 <img src="media/distribution.png" width="450" />
+
+Model is able to consistently reach 512 tile early in training: 
+
 <img src="media/consistency.png" width="450" />
 
 ## Visualization
